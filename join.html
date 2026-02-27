@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Join</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        height: 100vh;
+        background: linear-gradient(135deg, #1e293b, #0f172a);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+
+    .join-container {
+        background: #1e293b;
+        padding: 40px;
+        border-radius: 12px;
+        width: 380px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .join-container h2 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .input-group label {
+        font-size: 0.9rem;
+        color: #cbd5e1;
+    }
+
+    .input-group input {
+        padding: 12px;
+        border-radius: 8px;
+        border: none;
+        background: #0f172a;
+        color: white;
+        outline: none;
+        transition: 0.3s ease;
+    }
+
+    .input-group input:focus {
+        background: #162034;
+        border: 1px solid #10b981;
+    }
+
+    .message {
+        font-size: 0.8rem;
+        height: 16px;
+    }
+
+    .strength-bar {
+        height: 6px;
+        border-radius: 4px;
+        background: #0f172a;
+        overflow: hidden;
+        margin-top: 4px;
+    }
+
+    .strength-fill {
+        height: 100%;
+        width: 0%;
+        transition: 0.3s ease;
+    }
+
+    .join-btn {
+        margin-top: 10px;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        background: #10b981;
+        color: white;
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
+
+    .join-btn:hover {
+        background: #059669;
+    }
+
+    .join-btn:disabled {
+        background: #334155;
+        cursor: not-allowed;
+    }
+
+    .back-link {
+        text-align: center;
+        font-size: 0.9rem;
+        color: #94a3b8;
+        text-decoration: none;
+        transition: 0.3s ease;
+    }
+
+    .back-link:hover {
+        color: white;
+    }
+</style>
+</head>
+
+<body>
+
+<form class="join-container" id="joinForm">
+    <h2>Create Account</h2>
+
+    <!-- Username -->
+    <div class="input-group">
+        <label>Username</label>
+        <input type="text" id="username" required>
+        <div class="message" id="usernameMessage"></div>
+    </div>
+
+    <!-- Email -->
+    <div class="input-group">
+        <label>Email</label>
+        <input type="email" id="email" required>
+        <div class="message" id="emailMessage"></div>
+    </div>
+
+    <!-- Password -->
+    <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="password" required>
+        <div class="strength-bar">
+            <div class="strength-fill" id="strengthFill"></div>
+        </div>
+        <div class="message" id="passwordMessage"></div>
+    </div>
+
+    <!-- Confirm -->
+    <div class="input-group">
+        <label>Confirm Password</label>
+        <input type="password" id="confirm" required>
+        <div class="message" id="matchMessage"></div>
+    </div>
+
+    <button type="submit" class="join-btn" id="joinBtn" disabled>Join</button>
+
+    <a href="index.html" class="back-link">← Back to Home</a>
+</form>
+
+<script>
+const usernameInput = document.getElementById("username");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const confirmInput = document.getElementById("confirm");
+
+const usernameMessage = document.getElementById("usernameMessage");
+const emailMessage = document.getElementById("emailMessage");
+const passwordMessage = document.getElementById("passwordMessage");
+const matchMessage = document.getElementById("matchMessage");
+
+const strengthFill = document.getElementById("strengthFill");
+const joinBtn = document.getElementById("joinBtn");
+
+function validateUsername() {
+    const username = usernameInput.value.trim();
+    const regex = /^[a-zA-Z0-9_]{3,20}$/;
+
+    if (!username) {
+        usernameMessage.textContent = "";
+        return false;
+    }
+
+    if (regex.test(username)) {
+        usernameMessage.textContent = "Valid username ✔";
+        usernameMessage.style.color = "#10b981";
+        return true;
+    } else {
+        usernameMessage.textContent = "3–20 characters, letters/numbers/_ only";
+        usernameMessage.style.color = "#ef4444";
+        return false;
+    }
+}
+
+function validateEmail() {
+    const email = emailInput.value;
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!email) {
+        emailMessage.textContent = "";
+        return false;
+    }
+
+    if (regex.test(email)) {
+        emailMessage.textContent = "Valid email ✔";
+        emailMessage.style.color = "#10b981";
+        return true;
+    } else {
+        emailMessage.textContent = "Invalid email format";
+        emailMessage.style.color = "#ef4444";
+        return false;
+    }
+}
+
+function checkPasswordStrength() {
+    const password = passwordInput.value;
+    let score = 0;
+
+    if (password.length >= 6) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+
+    let strengthText = "";
+    let width = "0%";
+    let color = "#ef4444";
+
+    if (password.length === 0) {
+        strengthText = "";
+    } else if (score <= 1) {
+        strengthText = "Weak";
+        width = "33%";
+        color = "#ef4444";
+    } else if (score <= 3) {
+        strengthText = "Okay";
+        width = "66%";
+        color = "#f59e0b";
+    } else {
+        strengthText = "Good";
+        width = "100%";
+        color = "#10b981";
+    }
+
+    strengthFill.style.width = width;
+    strengthFill.style.background = color;
+    passwordMessage.textContent = strengthText;
+    passwordMessage.style.color = color;
+
+    return score >= 2;
+}
+
+function checkMatch() {
+    if (!confirmInput.value) {
+        matchMessage.textContent = "";
+        return false;
+    }
+
+    if (passwordInput.value === confirmInput.value) {
+        matchMessage.textContent = "Passwords match ✔";
+        matchMessage.style.color = "#10b981";
+        return true;
+    } else {
+        matchMessage.textContent = "Passwords do not match";
+        matchMessage.style.color = "#ef4444";
+        return false;
+    }
+}
+
+function validateForm() {
+    const valid =
+        validateUsername() &&
+        validateEmail() &&
+        checkPasswordStrength() &&
+        checkMatch();
+
+    joinBtn.disabled = !valid;
+}
+
+usernameInput.addEventListener("input", validateForm);
+emailInput.addEventListener("input", validateForm);
+passwordInput.addEventListener("input", validateForm);
+confirmInput.addEventListener("input", validateForm);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome</title>
+<script src="jquery-4.0.0.min.js"></script>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        height: 100vh;
+        background: linear-gradient(135deg, #1e293b, #0f172a);
+        color: white;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Top bar */
+    .top-bar {
+        width: 100%;
+        padding: 20px 40px;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .admin-btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        background: #334155;
+        color: white;
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
+
+    .admin-btn:hover {
+        background: #475569;
+    }
+
+    /* Main layout */
+    .container {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+    }
+
+    .left {
+        width: 50%;
+        padding-right: 40px;
+    }
+
+    .left h1 {
+        font-size: 3rem;
+        margin-bottom: 20px;
+    }
+
+    .left p {
+        font-size: 1.2rem;
+        line-height: 1.6;
+        color: #cbd5e1;
+    }
+
+    .right {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .action-btn {
+        width: 200px;
+        padding: 15px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
+
+    .login-btn {
+        background: #3b82f6;
+        color: white;
+    }
+
+    .login-btn:hover {
+        background: #2563eb;
+    }
+
+    .join-btn {
+        background: #10b981;
+        color: white;
+    }
+
+    .join-btn:hover {
+        background: #059669;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+        .container {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .left, .right {
+            width: 100%;
+            padding: 0;
+        }
+
+        .left {
+            margin-bottom: 40px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="top-bar">
+    <button class="admin-btn">Admin</button>
+</div>
+
+<div class="container">
+    <div class="left">
+        <h1>Welcome to Damien's Chat Application</h1>
+        <p>
+            This currently has no use but I plan to use it for JROTC in some way.
+        </p>
+    </div>
+
+    <div class="right">
+        <button class="action-btn login-btn">Login</button>
+        <button class="action-btn join-btn">Join</button>
+    </div>
+</div>
+
+<script>
+    $(".login-btn").on("click", function() {
+        window.location.href = "login.html"
+    })
+    $(".join-btn").on("click", function() {
+        window.location.href = "join.html"
+    })
+    $(".admin-btn").on("click", function() {
+        window.location.href = "admin.html"
+    })
+
+</script>
+</body>
+</html>

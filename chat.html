@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chat</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        height: 100vh;
+        background: linear-gradient(135deg, #1e293b, #0f172a);
+        color: white;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Main Layout */
+    .main {
+        flex: 1;
+        display: flex;
+        overflow: hidden;
+    }
+
+    /* Channels (Left) */
+    .channels {
+        width: 260px;
+        background: #1e293b;
+        padding: 20px;
+        border-right: 1px solid #334155;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .channels h3 {
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    .channel {
+        padding: 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.2s ease;
+        color: #cbd5e1;
+    }
+
+    .channel:hover {
+        background: #334155;
+        color: white;
+    }
+
+    .channel.active {
+        background: #3b82f6;
+        color: white;
+    }
+
+    /* Chat Area (Right) */
+    .chat-area {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        overflow-y: auto;
+    }
+
+    .message {
+        margin-bottom: 15px;
+        padding: 12px 14px;
+        background: #1e293b;
+        border-radius: 10px;
+        max-width: 60%;
+        animation: fadeIn 0.2s ease;
+    }
+
+    .message.self {
+        background: #3b82f6;
+        align-self: flex-end;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Bottom Message Bar */
+    .message-bar {
+        display: flex;
+        padding: 15px 20px;
+        background: #1e293b;
+        border-top: 1px solid #334155;
+        gap: 10px;
+    }
+
+    .message-input {
+        flex: 1;
+        padding: 12px;
+        border-radius: 8px;
+        border: none;
+        background: #0f172a;
+        color: white;
+        outline: none;
+        transition: 0.2s ease;
+    }
+
+    .message-input:focus {
+        background: #162034;
+        border: 1px solid #3b82f6;
+    }
+
+    .send-btn {
+        padding: 12px 18px;
+        border: none;
+        border-radius: 8px;
+        background: #3b82f6;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+    .send-btn:hover {
+        background: #2563eb;
+    }
+
+    /* Responsive */
+    @media (max-width: 800px) {
+        .channels {
+            width: 180px;
+        }
+
+        .message {
+            max-width: 80%;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="main">
+
+    <!-- Left: Channels -->
+    <div class="channels">
+        <h3>Channels</h3>
+        <div class="channel active"># general</div>
+        <div class="channel"># announcements</div>
+        <div class="channel"># support</div>
+    </div>
+
+    <!-- Right: Chat -->
+    <div class="chat-area" id="chatArea">
+        <div class="message">Welcome to the chat 👋</div>
+    </div>
+
+</div>
+
+<!-- Bottom message bar -->
+<div class="message-bar">
+    <input type="text" class="message-input" id="messageInput" placeholder="Type a message...">
+    <button class="send-btn" id="sendBtn">Send</button>
+</div>
+
+<script>
+const chatArea = document.getElementById("chatArea");
+const messageInput = document.getElementById("messageInput");
+const sendBtn = document.getElementById("sendBtn");
+
+function sendMessage() {
+    const text = messageInput.value.trim();
+    if (!text) return;
+
+    const msg = document.createElement("div");
+    msg.classList.add("message", "self");
+    msg.textContent = text;
+
+    chatArea.appendChild(msg);
+    chatArea.scrollTop = chatArea.scrollHeight;
+    messageInput.value = "";
+}
+
+sendBtn.addEventListener("click", sendMessage);
+
+messageInput.addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        sendMessage();
+    }
+});
+</script>
+
+</body>
+</html>

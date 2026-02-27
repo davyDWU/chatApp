@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        height: 100vh;
+        background: linear-gradient(135deg, #1e293b, #0f172a);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+
+    .login-container {
+        background: #1e293b;
+        padding: 40px;
+        border-radius: 12px;
+        width: 360px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .login-container h2 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .input-group label {
+        font-size: 0.9rem;
+        color: #cbd5e1;
+    }
+
+    .input-group input {
+        padding: 12px;
+        border-radius: 8px;
+        border: none;
+        background: #0f172a;
+        color: white;
+        outline: none;
+        transition: 0.3s ease;
+    }
+
+    .input-group input:focus {
+        background: #162034;
+        border: 1px solid #3b82f6;
+    }
+
+    .login-btn {
+        margin-top: 10px;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        background: #3b82f6;
+        color: white;
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
+
+    .login-btn:hover {
+        background: #2563eb;
+    }
+
+    .login-btn:disabled {
+        background: #334155;
+        cursor: not-allowed;
+    }
+
+    .error-message {
+        font-size: 0.85rem;
+        color: #ef4444;
+        height: 18px;
+        text-align: center;
+    }
+
+    .back-link {
+        text-align: center;
+        font-size: 0.9rem;
+        color: #94a3b8;
+        text-decoration: none;
+        transition: 0.3s ease;
+    }
+
+    .back-link:hover {
+        color: white;
+    }
+</style>
+</head>
+
+<body>
+
+<form class="login-container" id="adminLoginForm">
+    <h2>Admin Verification</h2>
+
+    <div class="input-group">
+        <label>Username</label>
+        <input type="text" id="username" required>
+    </div>
+
+    <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="password" required>
+    </div>
+
+    <div class="error-message" id="errorMessage"></div>
+
+    <button type="submit" class="login-btn" id="loginBtn" disabled>
+        Verify & Continue
+    </button>
+
+    <a href="index.html" class="back-link">← Back to Home</a>
+</form>
+
+<script>
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
+const loginBtn = document.getElementById("loginBtn");
+const errorMessage = document.getElementById("errorMessage");
+
+// Enable button only when both fields have text
+function validateInputs() {
+    loginBtn.disabled = !(usernameInput.value.trim() && passwordInput.value.trim());
+}
+
+usernameInput.addEventListener("input", validateInputs);
+passwordInput.addEventListener("input", validateInputs);
+
+// Temporary frontend check (replace with backend request)
+document.getElementById("adminLoginForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    // TEMPORARY check — replace with backend call
+    if (username === "admin" && password === "admin123") {
+        window.location.href = "admin.html";
+    } else {
+        errorMessage.textContent = "Invalid admin credentials";
+    }
+});
+</script>
+
+</body>
+</html>
