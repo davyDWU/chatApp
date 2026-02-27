@@ -183,8 +183,14 @@
     $(".join-btn").on("click", function() {
         window.location.href = "join.html"
     })
-    $(".admin-btn").on("click", function() {
-        window.location.href = "admin.html"
+    $(".admin-btn").on("click", async function() {
+        if (!localStorage.getItem("admin_token")) {window.location.href = "admin.html"} // test
+        const result = await sendLoginRequest({ token: localStorage.getItem("admin_token") });
+        if (result.message && result.token) {
+            window.location.href = "admin_panel.html"
+        } else {
+            window.location.href = "admin.html"
+        }
     })
 
 </script>

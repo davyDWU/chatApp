@@ -163,9 +163,15 @@ document.addEventListener("DOMContentLoaded", function () {
         const username = usernameInput.value;
         const password = passwordInput.value;
 
+        if (username == "admin") {
+            alert("wrong login")
+            window.location.href = "index.html"
+        }
+
         const result = await sendLoginRequest(username, password);
 
         // alert(JSON.stringify(result));
+
 
 
         const oldError = document.querySelector(".error-message");
@@ -182,12 +188,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const passwordInput = document.getElementById("password");
             passwordInput.parentNode.insertBefore(errorEl, passwordInput.nextSibling);
         } else {
-            if (!localStorage.getItem("token")) {
-                localStorage.setItem("token", result.token)
-                window.location.href = "chat.html"
-            } else {
-                window.location.href = "chat.html"
-            }
+            localStorage.setItem("token", result.token)
+            window.location.href = "chat.html"
         }
     });
 });

@@ -189,7 +189,8 @@ document.getElementById("adminLoginForm").addEventListener("submit", async funct
         alert("invalid creds")
     } else if (result.message) {
         console.log("success")
-        // window.location.href = "admin_panel.html"
+        localStorage.setItem("admin_token", result.token)
+        window.location.href = "admin_panel.html"
     }
 });
 </script>
