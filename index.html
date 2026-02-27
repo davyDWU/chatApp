@@ -146,8 +146,39 @@
 </div>
 
 <script>
-    $(".login-btn").on("click", function() {
-        window.location.href = "login.html"
+    async function sendLoginRequest({ username, password, token } = {}) {
+    const apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsemp6bHlyZmR3ZmJkdnJmc2N6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxNjM5NTcsImV4cCI6MjA4NzczOTk1N30.unycMUxRBEOi5KIvToqmkpu6uzgTzWdA8W9v6xT3Z34"; // put your real API key here
+
+    try {
+        // build the body depending on what you pass
+        const body = token ? { token } : { username, password };
+        const response = await fetch(
+            "https://ilzjzlyrfdwfbdvrfscz.supabase.co/functions/v1/login",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${apiKey}`
+                },
+                body: JSON.stringify(body),
+                credentials: "omit"
+            }
+        );
+
+        return await response.json();
+    } catch (err) {
+        console.error("Request failed:", err);
+        return { error: "Network error" };
+    }
+}
+    // delete ^
+    $(".login-btn").on("click", async function() {
+    const result = await sendLoginRequest({ token: localStorage.getItem("token") });
+        if (result == "OK") {
+            window.location.href = "chat.html"
+        } else {
+            window.location.href = "login.html"
+        }
     })
     $(".join-btn").on("click", function() {
         window.location.href = "join.html"
