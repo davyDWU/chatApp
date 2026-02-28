@@ -174,7 +174,7 @@
     // delete ^
     $(".login-btn").on("click", async function() {
     const result = await sendLoginRequest({ token: localStorage.getItem("token") });
-        if (result == "OK") {
+        if (result.message == "OK") {
             window.location.href = "chat.html"
         } else {
             window.location.href = "login.html"

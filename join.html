@@ -125,9 +125,13 @@ async function signupUser(username, email, password) {
 }
 
 // --- Join button click ---
-joinBtn.addEventListener("click", function() {
-
-    
+joinBtn.addEventListener("click", async function() {
+  const result = await signupUser(usernameInput.value, emailInput.value, passwordInput.value)
+  if (result.token) {
+    localStorage.setItem("token", result.token)
+  } else {
+    console.log(result)
+  }
 });
 </script>
 

@@ -165,21 +165,8 @@
 
 <div class="container">
     <!-- Left: Join Requests -->
-    <div class="left">
-        <h3>Pending Join Requests</h3>
-
-        <!-- Placeholder requests -->
-        <div class="request">
-            <span>user123@example.com</span>
-            <button class="approve-btn">Approve</button>
-        </div>
-
-        <div class="request">
-            <span>newmember@example.com</span>
-            <button class="approve-btn">Approve</button>
-        </div>
-
-    </div>
+    <h3>Pending Join Requests</h3>
+    <div id="requests-container"></div>
 
     <!-- Right: Admin Action -->
     <div class="right">
@@ -190,14 +177,70 @@
 </div>
 
 <script>
-// Placeholder logic for approve buttons
-document.querySelectorAll(".approve-btn").forEach(btn => {
-    btn.addEventListener("click", function() {
-        this.textContent = "Approved";
-        this.style.background = "#334155";
-        this.disabled = true;
+const EDGE_URL = "https://ilzjzlyrfdwfbdvrfscz.supabase.co/functions/v1/admin-panel";
+    const apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsemp6bHlyZmR3ZmJkdnJmc2N6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxNjM5NTcsImV4cCI6MjA4NzczOTk1N30.unycMUxRBEOi5KIvToqmkpu6uzgTzWdA8W9v6xT3Z34"; // put your real API key here
+
+async function callAdmin(action, userId = null) {
+    const token = localStorage.getItem("admin_token");
+
+    const response = await fetch(EDGE_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+            token: token,
+            action: action,
+            userId: userId
+        })
     });
-});
+
+    return await response.json();
+}
+
+async function loadPendingUsers() {
+    const result = await callAdmin("load");
+
+    if (result.error) {
+        console.error(result.error);
+        return;
+    }
+
+    const container = document.getElementById("requests-container");
+    container.innerHTML = "";
+
+    result.users.forEach(user => {
+        const div = document.createElement("div");
+        div.className = "request";
+
+        div.innerHTML = `
+            <span>${user.email}</span>
+            <button class="approve-btn">Approve</button>
+        `;
+
+        div.querySelector("button").addEventListener("click", async function () {
+            const approveResult = await callAdmin("approve", user.id);
+
+            if (!approveResult.error) {
+                this.textContent = "Approved";
+                this.disabled = true;
+                this.style.background = "#334155";
+            }
+        });
+
+        container.appendChild(div);
+    });
+}
+
+window.onload = async function () {
+    if (!localStorage.getItem("admin_token")) {
+        window.location.href = "index.html";
+        return;
+    }
+
+    loadPendingUsers();
+};
 </script>
 
 </body>
